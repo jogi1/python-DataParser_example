@@ -44,8 +44,35 @@ def main():
         l = [0.0, 0.1, 0.2]
         print("testing vec3_t: {}".format(l))
         data = struct.pack("<fff", *l)
-        parsed = parser.parse('vec3_t', data)
-        parsed.prints()
+        vec3_t = parser.parse('vec3_t', data)
+        vec3_t.prints()
+        vec3_t.x = 1.123
+        vec3_t.prints()
+        print(len(data))
+        new_data = vec3_t.pack()
+        print(len(new_data))
+        vec3_t_new_data = parser.parse('vec3_t', new_data)
+        vec3_t_new_data.prints()
+
+        # testint array packing
+        l = [1, 2]
+        data = struct.pack("<ll", *l)
+        parsed_longs = parser.parse('long:__:{}'.format(len(l)), data)
+        parsed_longs.prints()
+        new_data = parsed_longs.pack()
+        if new_data != data:
+            print("packing didnt work")
+        parsed_longs.__value[0] = 4
+        parsed_longs.prints()
+
+        new_data = parsed_longs.pack()
+        if new_data == data:
+            print("packing didnt work")
+
+        print(struct.unpack("<ll", new_data))
+
+
+
 
 
 if __name__ == '__main__':
