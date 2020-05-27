@@ -32,15 +32,13 @@ def main():
         parsed_mipheader = parser.parse('mipheader_t', input_bsp_data[header_offset:])
         # this shit needs to change
         count = parsed_mipheader.numtex
-        offset = parsed_mipheader.offset
 
-        for i in range(0, count-1):
+        parsed_offsets = parser.parse('long:__:{}'.format(count), input_bsp_data[header_offset + 4:]).__value
+
+        for offset in parsed_offsets:
+            print(offset)
             parsed_texture = parser.parse('miptex_t', input_bsp_data[header_offset + offset:])
             parsed_texture.prints()
-            # read next offset
-            parsed_new_offset = parser.parse('long', input_bsp_data[header_offset + (i) * 4:])
-            # this somewhat still sucks, that you need to call __value on basetypes
-            offset = parsed_new_offset.__value
 
         # just testing vec_t
         l = [0.0, 0.1, 0.2]
