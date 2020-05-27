@@ -32,11 +32,18 @@ def main():
         parsed_mipheader = parser.parse('mipheader_t', input_bsp_data[header_offset:])
         # this shit needs to change
         count = parsed_mipheader.numtex
+        if parsed_mipheader.numtex != len(parsed_mipheader.offset):
+            raise("DataParser: array_length_reference missmatch")
+        else:
+            print("DataParser 'array_length_reference' ok.")
 
+        # reading offsets manualy
         parsed_offsets = parser.parse('long:__:{}'.format(count), input_bsp_data[header_offset + 4:]).__value
-
+        print(parsed_offsets)
+        # useing the DataParser={'array_length_reference': 'numtex'} extension in the comment in bsp.h
+        parsed_offsets = parsed_mipheader.offset
+        print(parsed_offsets)
         for offset in parsed_offsets:
-            print(offset)
             parsed_texture = parser.parse('miptex_t', input_bsp_data[header_offset + offset:])
             parsed_texture.prints()
 
@@ -70,9 +77,6 @@ def main():
             print("packing didnt work")
 
         print(struct.unpack("<ll", new_data))
-
-
-
 
 
 if __name__ == '__main__':

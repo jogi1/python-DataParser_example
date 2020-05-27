@@ -53,7 +53,7 @@ typedef struct                 // Bounding Box, Short values
 
 typedef struct                 // Mip texture list header
 { long numtex;                 // Number of textures in Mip Texture list
-  long offset[];         // Offset to each of the individual texture
+  long offset[];         // Offset to each of the individual texture DataParser={'array_length_reference': 'numtex'}
 } mipheader_t;                 //  from the beginning of mipheader_t
 
 typedef struct                 // Mip Texture
